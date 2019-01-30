@@ -1,0 +1,166 @@
+---
+title: "Assignment_03"
+author: "Stephen Johnson"
+date: "January 30, 2019"
+output: 
+  html_document:
+  keep_md: true
+---
+
+# 1 GitHub Cloning
+
+```{Git tidy=FALSE}
+## Change directory in Git
+## cd C:/Users/sj103/OneDrive/Documents/MSDS_Working
+## Create new directory
+## mkdir data_raw
+## Navigate to the directory
+## cd data_raw/
+## Clone the repository to new directory
+## git clone https://github.com/sjohnson1039/awesome-public-datasets.git
+```
+
+#2 Data Summary
+
+## a. Read titanic file from directory and set as df
+```{R echo=TRUE}
+df <- read.csv(file="C:/Users/sj103/OneDrive/Documents/MSDS_Working/Assignment_03/titanic.csv",header=TRUE, sep=',')
+```
+## b. Males and Females
+### Count of Males and Females
+```{R echo=TRUE}
+table(df$Sex)
+plot(df$Sex, main="Males and Females on the Titanic",
+      col="darkblue")
+```
+## c. Use one apply function
+### Means of Age, Fare, and Survival
+```{R echo=TRUE}
+NewAge <- na.omit(df$Age)
+sapply(list(NewAge, df$Fare, df$Survived), mean)
+```
+
+#3 Function Building
+
+## a. Objects for median Age, range of Duration of Sleep, Mean and SD of RSES
+```{R echo=TRUE}
+## read sleep_data_01 file from directory and set as sleep
+sleep <- read.csv(file="C:/Users/sj103/OneDrive/Documents/MSDS_Working/Assignment_03/sleep_data_01.csv", header=TRUE, sep=",")
+```
+## Median Age
+```{R echo=TRUE}
+## Function for median applied to Age (NAs ommitted)
+NewAge2 <- na.omit(sleep$Age)
+median_val <- function(x){
+  median(x)
+}
+Med_age <- median_val(NewAge2)
+Med_age
+```
+## Range of Duration of Sleep
+```{R echo=TRUE}
+## Function for range applied to Duration of Sleep (NAs ommitted)
+NewDuration2 <- na.omit(sleep$Duration)
+range_val <- function(x){
+  range(x)
+}
+Rge_Dur <- range_val(NewDuration2)
+Rge_Dur
+```
+## Mean and SD of RSES
+```{R echo=TRUE}
+## Function for mean applied to RSES
+RSES2 <- na.omit(sleep$RSES)
+mean_val <- function(x){
+  mean(x)
+}
+Mean_RSES <- mean_val(RSES2)
+Mean_RSES
+## Function for sd applied to RSES
+sd_val <- function(x){
+  sd(x)
+}
+SD_RSES <- sd_val(RSES2)
+SD_RSES
+```
+## b. Create a data frame with median age, RSES mean and sd, and range of Duration
+```{R echo=TRUE}
+## objects for parameters
+Med_age
+Mean_RSES5 <- Mean_RSES/5
+Mean_RSES5
+SD_RSES5 <- SD_RSES/5
+SD_RSES5
+Rge_Dur2 <- diff(Rge_Dur)
+Rge_Dur2
+report <- data.frame(Med_age, Mean_RSES5, SD_RSES5, Rge_Dur2)
+report
+```
+## c. Change the column names for data frame
+```{R echo=TRUE}
+## column names vector
+cnames <- c("MedianAge", "SelfEsteem", "SE_SD", "DurationRange")
+colnames(report) <- cnames
+```
+## d. Round the report to at most 2 digits
+```{R echo=TRUE}
+## rounding function
+rounding <- function(x){
+  round(x, digits = 2)
+}
+```
+## e. Show report using round function
+```{R echo=TRUE}
+rounding(report)
+```
+
+#4 FiveThirtyEight Data
+
+##a. Install the fivethirtyeight package
+
+##b. Assign 22nd dataset to df
+```{R echo=TRUE}
+fivethirty <- data(package = "fivethirtyeight")
+fivethirty$results[22,]
+df <- (fivethirtyeight::college_recent_grads)
+```
+##c. Write out the URL in a comment to the related news story
+```{R echo=TRUE}
+vignette("fivethirtyeight", package = "fivethirtyeight")
+```
+College major critical to future earnings: https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+##d. Dimensions and column names
+```{R echo=TRUE}
+dim(df)
+colnames(df)
+```
+
+#5 Data Summary
+
+##a. Column names of a data frame
+```{R echo=TRUE}
+colnames(df)
+ncol(df)
+```
+##b. Count for each major category
+```{R echo=TRUE}
+major_count <- table(df$major_category)
+major_count
+```
+##c. Barplot of each major
+```{R echo=TRUE}
+par(las=2)
+barplot(major_count, main="Count of Graduates by Major", col = "darkred", xlab = "Count", ylab = "Major", horiz = T)
+```
+##d. Write fivethirtyeight to csv file
+```{R echo=TRUE}
+write.csv(df, "fivethirtyeight.csv",row.names=FALSE)
+```
+
+#6 Codebook
+
+##a. Local directory for Homework
+###  "C:/Users/sj103/OneDrive/Documents/MSDS_Working/Assignment_03"
+##b. README.md file
+##c. Markdown script, HTML, fivethirtyeight data
+##d. Link to GitHub:  https://github.com/sjohnson1039/MSDS_Assignments
